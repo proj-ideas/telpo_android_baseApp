@@ -27,10 +27,12 @@ public class EMVAction extends Application {
     int ret;
     String sMasterKey = "11111111111111111111111111111111";
     String sPinKey = "B7444C47AEC3E0D0CDEDB086252F54AE";
+
     private static boolean magReaderOpen = false;
     private static boolean iccReaderOpen = false;
     private static boolean nfcReaderOpen = false;
-
+    String BDK = "1A1A1A1A1A1A1A1A1C1C1C1C1C1C1C1C";
+    String KSN = "FFFF9876540002000001";
 
     @Override
     public void onCreate() {
@@ -38,7 +40,7 @@ public class EMVAction extends Application {
         init();
     }
 
-    public void init(){
+    public void init() {
         emvService = EmvService.getInstance();
         EmvService.Emv_SetDebugOn(1);
         EmvService.Emv_RemoveAllApp();
@@ -73,6 +75,11 @@ public class EMVAction extends Application {
             int t = PinpadService.TP_WritePinKey(1, ISOUtil.hex2byte(sPinKey), PinpadService.KEY_WRITE_DECRYPT, 0);
             Log.d(TAG, "TP_WritePinKey Result:" + t);
         }
+
+        Log.i(TAG, "init(): Writing BDK and KSN... ");
+        int r = PinpadService.TP_PinpadWriteDukptKey(ISOUtil.hex2byte(BDK),
+                ISOUtil.hex2byte(KSN), 0, PinpadService.KEY_WRITE_DIRECT, 3);
+        Log.i(TAG, "init(): DUKPT write result:  " + r);
         addAppsAndCapk();
     }
 
@@ -92,18 +99,18 @@ public class EMVAction extends Application {
 
     private static void startCardReading() {
         openDevices();
-        if(!magReaderOpen && !iccReaderOpen && !nfcReaderOpen){
+        if (!magReaderOpen && !iccReaderOpen && !nfcReaderOpen) {
             onFailure("No Card reader device open!");
             return;
         }
         CardType detectedCard = detectCard();
 
-        if(detectedCard == null){
+        if (detectedCard == null) {
             onFailure("No card detected");
             return;
         }
 
-        switch(detectedCard){
+        switch (detectedCard) {
             case MAGSTRIPE:
                 processMagStripe();
                 break;
@@ -121,7 +128,7 @@ public class EMVAction extends Application {
 
     }
 
-    private static void onFailure(String message){
+    private static void onFailure(String message) {
         destroySession();
     }
 
@@ -188,10 +195,10 @@ public class EMVAction extends Application {
             EmvService.MagStripeCloseReader();
 
         if (iccReaderOpen)
-            //EmvService.IccCloseReader();
+            EmvService.IccCloseReader();
 
-            if (nfcReaderOpen)
-                EmvService.NfcCloseReader();
+        if (nfcReaderOpen)
+            EmvService.NfcCloseReader();
     }
 
 

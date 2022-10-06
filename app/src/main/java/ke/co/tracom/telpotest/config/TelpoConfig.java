@@ -7,8 +7,8 @@ import org.jpos.iso.ISOUtil;
 
 public class TelpoConfig {
     int transactionCounter = 1;
-    private final String SERVER_IP = "80.169.139.237";
-    private final int SERVER_PORT = 8527;
+    private final String SERVER_IP = "41.215.130.247";
+    private final int SERVER_PORT = 10051;
 
     public int getTransactionCounter() {
         return transactionCounter;

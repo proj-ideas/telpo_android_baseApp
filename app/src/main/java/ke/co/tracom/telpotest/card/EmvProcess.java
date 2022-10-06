@@ -4,6 +4,7 @@ import static ke.co.tracom.telpotest.Constant.*;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.telpo.emv.EmvAmountData;
 import com.telpo.emv.EmvCandidateApp;
@@ -96,7 +97,7 @@ public class EmvProcess extends Application {
         @Override
         public int onOnlineProcess(EmvOnlineData emvOnlineData) {
             TransactionData transactionData = new TransactionData();
-           ISOPackager isoPackager = new TestIsoPackager();
+            ISOPackager isoPackager = new TestIsoPackager();
 
             Log.i(TAG, "onOnlineProcess()");
             int response = EmvService.EMV_TRUE;
@@ -120,7 +121,7 @@ public class EmvProcess extends Application {
                 isoMsg.set(52, getCurrentPin());
 
                 String tagVal = getTlv(0x9F26);
-                Log.e("9F26: ","tagVal");
+                Log.e("9F26: ", "tagVal");
 
                 TLVList field55 = new TLVList();
                 field55.append(0x9F26, getTlv(0x9F26));
@@ -161,6 +162,7 @@ public class EmvProcess extends Application {
                 transactionData.setResponseData(resp);
 
                 Log.d(TAG, "After receive response...");
+                Toast.makeText(getApplicationContext(), "Response code " + resp.getString("39"), Toast.LENGTH_SHORT).show();
 
             } catch (IOException | ISOException e) {
                 e.printStackTrace();
@@ -278,6 +280,7 @@ public class EmvProcess extends Application {
         emvService.setListener(listener);
         emvService.Emv_StartApp(1);
     }
+
     public String getPAN() {
         String track2 = getTrack2();
         return track2.substring(0, track2.lastIndexOf("D"));
@@ -308,16 +311,17 @@ public class EmvProcess extends Application {
         return track2.substring(track2.lastIndexOf("D") + 1,
                 track2.lastIndexOf("D") + 5);
     }
+
     public String getCurrentPin() {
         return currentPin;
     }
 
     public static void processNFC() {
-
+        //TODO: To be implemented
     }
 
     public static void processMagStripe() {
-
+        //TODO: To be implemented
     }
 
 }
