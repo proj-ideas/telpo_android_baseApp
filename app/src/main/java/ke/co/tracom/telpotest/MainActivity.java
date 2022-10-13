@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String amount = mEditAmount.getText().toString();
                 EMVAction emvAction = new EMVAction();
                 emvAction.init(this);
-                EMVAction.startEmv();
+                emvAction.startEmv();
 
         }
     }

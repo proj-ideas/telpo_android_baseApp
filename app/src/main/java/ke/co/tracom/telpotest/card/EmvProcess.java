@@ -3,6 +3,7 @@ package ke.co.tracom.telpotest.card;
 import static ke.co.tracom.telpotest.Constant.*;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class EmvProcess extends Application {
     private static int ret;
     private long Amt;
     private static String currentPin;
+    Context mContext;
 
     private EmvServiceListener listener = new EmvServiceListener() {
         @Override
@@ -54,7 +56,7 @@ public class EmvProcess extends Application {
         @Override
         public int onInputPin(EmvPinData emvPinData) {
             Log.w(TAG, "onInputPin: " + "callback [onInputPIN]:" + emvPinData.type);
-            PinParam param = new PinParam(getApplicationContext());
+            PinParam param = new PinParam(mContext);
             param.KeyIndex = 1;
             param.WaitSec = 30;
             param.MaxPinLen = 6;
@@ -260,8 +262,9 @@ public class EmvProcess extends Application {
         return mResult;
     }
 
-    public void processIcc() {
+    public void processIcc(Context context) {
         EmvService emvService = EmvService.getInstance();
+        mContext = context;
 
         Log.d(TAG, "ICC Power on");
         ret = EmvService.IccCard_Poweron();

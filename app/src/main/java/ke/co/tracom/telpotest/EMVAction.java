@@ -94,14 +94,14 @@ public class EMVAction extends Application {
         PinpadService.Close();
     }
 
-    public static void startEmv() {
+    public void startEmv() {
         int ret;
         final EmvParam emvParam = TelpoConfig.getDefaultEmvParam();
         startCardReading();
     }
 
 
-    private static void startCardReading() {
+    private void startCardReading() {
         openDevices();
         if (!magReaderOpen && !iccReaderOpen && !nfcReaderOpen) {
             onFailure("No Card reader device open!");
@@ -120,7 +120,7 @@ public class EMVAction extends Application {
                 break;
             case ICC:
                 EmvProcess emvProcess = new EmvProcess();
-                emvProcess.processIcc();
+                emvProcess.processIcc(this);
                 break;
             case NFC:
                 processNFC();
