@@ -119,8 +119,8 @@ public class EMVAction extends Application {
                 processMagStripe();
                 break;
             case ICC:
-                EmvProcess emvProcess = new EmvProcess();
-                emvProcess.processIcc(this);
+                EmvProcess emvProcess = new EmvProcess(this);
+                emvProcess.processIcc();
                 break;
             case NFC:
                 processNFC();

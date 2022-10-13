@@ -38,7 +38,11 @@ public class EmvProcess extends Application {
     private static int ret;
     private long Amt;
     private static String currentPin;
-    Context mContext;
+    public Context mContext;
+
+    public EmvProcess(Context context) {
+        this.mContext = context;
+    }
 
     private EmvServiceListener listener = new EmvServiceListener() {
         @Override
@@ -262,9 +266,9 @@ public class EmvProcess extends Application {
         return mResult;
     }
 
-    public void processIcc(Context context) {
+    public void processIcc() {
         EmvService emvService = EmvService.getInstance();
-        mContext = context;
+
 
         Log.d(TAG, "ICC Power on");
         ret = EmvService.IccCard_Poweron();
