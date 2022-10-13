@@ -5,6 +5,7 @@ import static ke.co.tracom.telpotest.card.EmvProcess.processMagStripe;
 import static ke.co.tracom.telpotest.card.EmvProcess.processNFC;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,27 +38,30 @@ public class EMVAction extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        init();
+        init(this);
     }
 
-    public void init() {
+    public void init(Context context) {
         emvService = EmvService.getInstance();
-        EmvService.Emv_SetDebugOn(1);
-        EmvService.Emv_RemoveAllApp();
-        EmvService.Emv_RemoveAllCapk();
-
-        ret = EmvService.Open(getApplicationContext());
+        ret = EmvService.Open(context);
         if (ret != EmvService.EMV_TRUE) {
             Log.e(TAG, "EmvService.Open fail");
             Toast.makeText(this, "EmvService.Open fail", Toast.LENGTH_SHORT).show();
         }
-        EmvService.Device_Open(getApplicationContext());
+        EmvService.Emv_SetDebugOn(1);
+//        EmvService.Emv_RemoveAllApp();
+//        EmvService.Emv_RemoveAllCapk();
+
+
+
+
+       ret =  EmvService.deviceOpen();
         if (ret != 0) {
             Log.e(TAG, "EmvService.Open fail");
-            Toast.makeText(this, "EmvService.Open fail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "EmvService.Open fail", Toast.LENGTH_SHORT).show();
         }
 
-        ret = PinpadService.Open(getApplicationContext());
+        ret = PinpadService.Open(context);
         if (ret == PinpadService.PIN_ERROR_NEED_TO_FOMRAT) {
             PinpadService.TP_PinpadFormat(this);
             ret = PinpadService.Open((this));//返回0成功其他失败

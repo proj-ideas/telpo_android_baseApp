@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(Constant.TAG, "*********************************************************");
                 String amount = mEditAmount.getText().toString();
                 EMVAction emvAction = new EMVAction();
-                emvAction.init();
+                emvAction.init(this);
                 EMVAction.startEmv();
 
         }

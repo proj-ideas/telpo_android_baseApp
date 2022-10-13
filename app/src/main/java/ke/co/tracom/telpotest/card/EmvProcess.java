@@ -125,6 +125,7 @@ public class EmvProcess extends Application {
 
                 TLVList field55 = new TLVList();
                 field55.append(0x9F26, getTlv(0x9F26));
+                field55.append(0x8C, getTlv(0x8C));
                 field55.append(0x9F02, getTlv(0x9F02));
                 field55.append(0x9F03, getTlv(0x9F03));
                 field55.append(0x9F1A, getTlv(0x9F1A));
