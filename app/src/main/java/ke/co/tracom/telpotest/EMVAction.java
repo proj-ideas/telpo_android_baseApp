@@ -41,6 +41,8 @@ public class EMVAction extends Application {
         init(this);
     }
 
+
+
     public void init(Context context) {
         emvService = EmvService.getInstance();
         ret = EmvService.Open(context);
@@ -51,7 +53,6 @@ public class EMVAction extends Application {
         EmvService.Emv_SetDebugOn(1);
 //        EmvService.Emv_RemoveAllApp();
 //        EmvService.Emv_RemoveAllCapk();
-
 
 
 
@@ -68,7 +69,7 @@ public class EMVAction extends Application {
         }
         Log.d("telpo", "PinpadService deviceOpen open:" + ret);
         if (ret != 0) {
-            Toast.makeText(this, "PinpadService open fail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "PinpadService open fail", Toast.LENGTH_SHORT).show();
         }
 
         Log.d(TAG, "Writing TP_WriteMasterKey:");
@@ -94,15 +95,15 @@ public class EMVAction extends Application {
         PinpadService.Close();
     }
 
-    public void startEmv() {
+    public void startEmv(Context context) {
         int ret;
         final EmvParam emvParam = TelpoConfig.getDefaultEmvParam();
-        startCardReading();
+        startCardReading(context);
     }
 
 
-    private void startCardReading() {
-        openDevices();
+    private void startCardReading(Context context) {
+        openDevices(context);
         if (!magReaderOpen && !iccReaderOpen && !nfcReaderOpen) {
             onFailure("No Card reader device open!");
             return;
@@ -119,8 +120,8 @@ public class EMVAction extends Application {
                 processMagStripe();
                 break;
             case ICC:
-                EmvProcess emvProcess = new EmvProcess(this);
-                emvProcess.processIcc();
+                EmvProcess emvProcess = new EmvProcess(context);
+                emvProcess.processIcc(context);
                 break;
             case NFC:
                 processNFC();
@@ -136,8 +137,11 @@ public class EMVAction extends Application {
         destroySession();
     }
 
-    private static void openDevices() {
+    private static void openDevices(Context context) {
+        int ret;
         Log.d(TAG, "Opening card reader devices");
+        ret = EmvService.Open(context);
+       ret = EmvService.deviceOpen();
         // Open MAGSTRIPE
         int magsOpen = EmvService.MagStripeOpenReader();
         Log.d(TAG, "Open Magstripe Reader: " + (magsOpen == EmvService.EMV_DEVICE_TRUE ? "SUCCESS" : "FAILED"));

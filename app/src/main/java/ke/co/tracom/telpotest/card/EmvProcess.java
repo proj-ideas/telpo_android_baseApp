@@ -266,7 +266,7 @@ public class EmvProcess extends Application {
         return mResult;
     }
 
-    public void processIcc() {
+    public void processIcc(Context context) {
         EmvService emvService = EmvService.getInstance();
 
 
